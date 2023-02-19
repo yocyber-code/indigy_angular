@@ -6,6 +6,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
   }
 </style>
@@ -18,7 +19,7 @@
     crossOrigin="anonymous"
   />
 
-  <div class="modal1">
+  <div class="modal1" *ngIf="isEdit">
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1"> รหัสพนักงาน </span>
@@ -49,8 +50,9 @@
         type="text"
         class="form-control"
         placeholder="เบอร์โทร"
-        [(ngModel)]="editData.tel"
+        [ngModel]="editData.tel"
         (input)="onTelChange($event)"
+        [maxlength]="12"
       />
     </div>
     <div class="input-group mb-3">
@@ -64,21 +66,21 @@
         id="inputGroupSelect01"
         [(ngModel)]="editData.position"
       >
-        <option value="โปรแกรมเมอร์">โปรแกรมเมอร์</option>
+        <option selected value="โปรแกรมเมอร์">โปรแกรมเมอร์</option>
         <option value="ดีไซเนอร์">ดีไซเนอร์</option>
         <option value="ผู้จัดการโครงการ">ผู้จัดการโครงการ</option>
       </select>
     </div>
     <div>
-      <button type="button" class="btn btn-success" onClick="{onConfirm}">
-        ยืนยัน {{editData.tel}}
+      <button type="button" class="btn btn-success" (click)="onConfirm()">
+        ยืนยัน
       </button>
     </div>
   </div>
 
-  <div>
+  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
     <h1>รายชื่อพนักงาน</h1>
-    <button type="button" class="btn btn-success" onClick="{onNew}">
+    <button type="button" class="btn btn-success" style="margin-right: 30px;" (click)="onNew()">
       เพิ่ม
     </button>
   </div>
@@ -93,14 +95,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of datas">
-        <th scope="row">{{data.id}}</th>
+      <tr *ngFor="let data of datas; let i = index">
+        <th>{{data.id}}</th>
         <td>{{data.name}}</td>
         <td>{{data.tel}}</td>
         <td>{{data.position}}</td>
         <td>
-          <button class="btn btn-warning">แก้ไข</button>
-          <button class="btn btn-danger">ลบ</button>
+          <button class="btn btn-warning" (click)="onEdit(data,i)" style="margin-right: 10px;">แก้ไข</button>
+          <button class="btn btn-danger" (click)="onDelete(i)">ลบ</button>
         </td>
       </tr>
     </tbody>
